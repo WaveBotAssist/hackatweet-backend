@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const Tweet = require('../models/tweets'); 
+const Tweet = require('../models/tweets'); // Assurez-vous que le chemin est correct
 
-router.get('/trends', (req, res) => {
-  console.log('Route /trends atteinte');
+router.get('/', (req, res) => { // Utilisez '/' pour correspondre à '/trends'
+  console.log('Route / atteinte');
   Tweet.find()
     .then(tweets => {
       console.log('Tweets trouvés:', tweets.length);
@@ -32,3 +32,4 @@ router.get('/trends', (req, res) => {
 });
 
 module.exports = router;
+
