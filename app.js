@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
+const cors = require('cors'); // Ajouter l'importation de cors
 require('dotenv').config();
 require('./models/connection'); // Connexion à la base de données
 
@@ -13,6 +14,7 @@ const tweetsRouter = require('./routes/tweets');
 const app = express();
 
 app.use(logger('dev'));
+app.use(cors()); // Utiliser cors comme middleware global
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
@@ -23,9 +25,7 @@ app.use('/users', usersRouter);
 app.use('/trends', trendsRouter);
 app.use('/tweets', tweetsRouter);
 
-const port = process.env.PORT || 3001;
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
-});
+
+
 module.exports = app;
 

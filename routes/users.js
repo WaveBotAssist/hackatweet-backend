@@ -52,4 +52,4 @@ router.post('/signin', (req, res) => {
   });
 });
 
-module.exports = router; // Utilisation de module.exports pour CommonJS
+module.exports = router; 
