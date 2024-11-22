@@ -7,7 +7,7 @@ const uid2 = require('uid2');
 const bcrypt = require('bcrypt');
 
 router.post('/signup', (req, res) => {
-  if (!checkBody(req.body, ['username', 'password'])) {
+  if (!checkBody(req.body, ['firstname', 'username', 'password'])) {
     res.json({ result: false, error: 'Missing or empty fields' });
     return;
   }
@@ -18,14 +18,21 @@ router.post('/signup', (req, res) => {
       const hash = bcrypt.hashSync(req.body.password, 10);
 
       const newUser = new User({
+        firstname: req.body.firstname,
         username: req.body.username,
+        image: '.../hacktweet-frontend/public/user.png',
         password: hash,
         token: uid2(32),
-       
       });
 
       newUser.save().then(newDoc => {
-        res.json({ result: true, token: newDoc.token });
+        res.json({ 
+          result: true, 
+          firstname: newDoc.firstname, 
+          username: newDoc.username,
+          image: newDoc.image,
+          token: newDoc.token 
+        });
       });
     } else {
       // User already exists in database
@@ -42,7 +49,7 @@ router.post('/signin', (req, res) => {
 
   User.findOne({ username: req.body.username }).then(data => {
     if (data && bcrypt.compareSync(req.body.password, data.password)) {
-      res.json({ result: true, token: data.token });
+      res.json({ result: true, firstname: data.firstname, username: data.username, image: data.image, token: data.token });
     } else {
       res.json({ result: false, error: 'User not found or wrong password' });
     }

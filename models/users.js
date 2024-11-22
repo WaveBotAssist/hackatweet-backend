@@ -2,7 +2,7 @@
 
  const usersSchema = mongoose.Schema({
     firstname : String,
-    name : String,
+    username : String,
     password: String,
     image : String,
     token : String,
