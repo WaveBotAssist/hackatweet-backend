@@ -11,7 +11,7 @@ router.post('/add', (req, res) => {
   }
 
   const newTweet = new Tweet({
-    timestamp: new Date(), // Ajout de l'horodatage actuel
+    timestamp: new Date(), // Ajout de la date actuel
     tweet: req.body.tweet, // Contenu du tweet depuis le corps de la requête
     likes: 0, // Initialisation du nombre de likes à 0
     likedBy: [] // Initialisation du tableau des utilisateurs qui ont liké
