@@ -10,7 +10,7 @@ const { hashSync, compareSync } = bcrypt;
 
 // Route pour l'inscription des utilisateurs
 router.post('/signup', (req, res) => {
-  if (!checkBody(req.body, ['username', 'password'])) {
+  if (!checkBody(req.body, ['firstname', 'username', 'password'])) {
     res.json({ result: false, error: 'Missing or empty fields' });
     return;
   }
@@ -21,13 +21,21 @@ router.post('/signup', (req, res) => {
       const hash = hashSync(req.body.password, 10);
 
       const newUser = new User({
+        firstname: req.body.firstname,
         username: req.body.username,
+        image: '.../hacktweet-frontend/public/user.png',
         password: hash,
         token: uid2(32),
       });
 
       newUser.save().then(newDoc => {
-        res.json({ result: true, token: newDoc.token });
+        res.json({ 
+          result: true, 
+          firstname: newDoc.firstname, 
+          username: newDoc.username,
+          image: newDoc.image,
+          token: newDoc.token 
+        });
       });
     } else {
       // L'utilisateur existe déjà dans la base de données
@@ -43,6 +51,9 @@ router.post('/signin', (req, res) => {
     return;
   }
 
+  User.findOne({ username: req.body.username }).then(data => {
+    if (data && bcrypt.compareSync(req.body.password, data.password)) {
+      res.json({ result: true, firstname: data.firstname, username: data.username, image: data.image, token: data.token });
   User.findOne({ username: req.body.username }).then(data => { // Correction du modèle User
     if (data && compareSync(req.body.password, data.password)) {
       res.json({ result: true, token: data.token });
